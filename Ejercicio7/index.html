@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+    <title>Document</title>
+</head>
+<body>
+    
+    <div id="app">
+
+        <titulo></titulo>
+        
+
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+    <script src="https://unpkg.com/vuex@3.1.3/dist/vuex.js"></script>
+    <script>
+
+        Vue.component('titulo', {
+            template:
+            `
+            <div>
+                <h1>numero {{ numero }}</h1>
+                <hijo></hijo>
+            </div>
+            `
+            ,
+            computed: {
+                ...Vuex.mapState(['numero'])
+            },
+            
+        });
+
+        Vue.component('hijo', {
+            template:
+            `
+            <div>
+                <button @click="aumentar">+</button>
+                <button @click="disminuir(2)">-</button>
+                <button @click="obtenerCursos">Obtener Cursos</button>
+                <h1>numero {{ numero }}</h1>
+                <ul v-for="(item, idx) of cursos" :key="idx">
+                    <li>{{item.nombre}}</li>
+                </ul>
+            </div>
+            `
+            ,
+            computed: {
+                ...Vuex.mapState(['numero'])
+            },
+            methods: {
+                ...Vuex.mapMutations(['aumentar', 'disminuir']),
+                ...Vuex.mapActions(['obtenerCursos'])
+            },
+        });
+
+
+
+        const store = new Vuex.Store({
+            state: {
+                numero: 10,
+                cursos: []
+            },
+            mutations: {
+                aumentar(state) {
+                    state.numero ++
+                },
+                disminuir(state, n) {
+                    state.numero -= n
+                },
+                llenarCursos(state, cursosAccion) {
+                    state.cursos = cursosAccion
+                }
+            },
+            actions: {
+                obtenerCursos: async function({ commit }) {
+                    const data = await fetch('https://api-laundry.herokuapp.com/');
+                    const cursos = await data.json();
+                    commit('llenarCursos', cursos)
+                }
+            }
+        })
+
+
+    new Vue({
+        el: '#app',
+        store: store,
+        data: {
+            
+        },
+        computed: {
+
+        }
+    })
+
+    </script>
+
+</body>
+</html>

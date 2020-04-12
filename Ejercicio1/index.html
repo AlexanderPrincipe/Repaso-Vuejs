@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <div id="app">
+        <h1> {{ titulo }} </h1>
+
+        <input type="text" v-model="nuevoUsuario" @keyup.enter="agregarUsuario">
+        <button @click="agregarUsuario">Agregar</button>
+        <ul>
+            <li v-for="(user, idx) in users" :key="idx">
+                <input type="number" v-model.number="user.edad">
+                {{ user.nombre }}
+                <button @click="user.edad++">+</button>
+                <span v-if="user.edad === 0"> - Sin Stock </span>
+            </li>
+        </ul>
+        <h4>Total : {{ sumarEdades }}</h4>
+
+    </div>
+
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="index.js"></script>
+</body>
+</html>
