@@ -83,7 +83,7 @@
             },
             actions: {
                 obtenerCursos: async function({ commit }) {
-                    const data = await fetch('https://api-laundry.herokuapp.com/');
+                    const data = await fetch('cursos.json');
                     const cursos = await data.json();
                     commit('llenarCursos', cursos)
                 }
